@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     # Own apps
     'pages',
     'users.apps.UsersConfig',
-    'django_filters',
     # Extra apps
     'rest_framework',
     'rest_framework.authtoken'
