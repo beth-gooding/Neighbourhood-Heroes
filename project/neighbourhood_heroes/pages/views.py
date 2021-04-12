@@ -2,9 +2,6 @@ from django.http import HttpResponse, Http404
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.generics import ListAPIView
-from rest_framework.filters import OrderingFilter
-from django_filters.rest_framework import FilterSet, DjangoFilterBackend
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
@@ -92,16 +89,3 @@ class TaskStatusUpdate(APIView):
             raise TaskNotAssigned()
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-
-class NewTaskList(ListAPIView):
-    serializer_class = TaskSerializer
-    filter_backends = [OrderingFilter, DjangoFilterBackend]
-    ordering_fields = ['task', 'estimated_duration_mins', 'task_setter']  # Without this, you can order on any variable
-    filterset_fields = ('task', 'task_setter')
-    
-    def get_queryset(self):
-        queryset = Task.objects.all()
-        task_setter = self.request.query_params.get('task_setter')
-        if task_setter is not None:
-            queryset = queryset.filter(task_setter = task_setter)
-        return queryset
